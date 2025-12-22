@@ -79,6 +79,28 @@
             <div >源数据:{{refTest}}</div>
             <div >源数据:{{refTest}}</div>
         </Card>
+
+      <Card title="box-decoration-break效果">
+        <div id="box-decoration-break_choose">
+          <Button @click="changeBoxDecorationBreakState('clone')" text="clone"></Button>
+          <Button @click="changeBoxDecorationBreakState('slice')" text="slice"></Button>
+        </div>
+        <div id="box-decoration-break_target">
+          <p>这是一段很长的文字，其中<span :class="{'box-decoration-break_highlight':true,'slice_box-decoration-break_highlight':boxDecorationBreakState === 'slice','clone_box-decoration-break_highlight':boxDecorationBreakState !== 'slice'}">这个行内元素可能会被分割到多行显示</span>，观察其装饰效果。</p>
+        </div>
+      </Card>
+
+
+      <Card title="堆叠上下文与图层">
+        <Block style="z-index: 1" size="large" color="yellow">
+          z-index:-1
+          <Block style="z-index: 1;color: yellow" color="red">123</Block>
+        </Block>
+        <Block style="z-index: 1" color="gray">z-index:1</Block>
+        <Block style="transform: translateY(-50px)">
+          opacity111111
+        </Block>
+      </Card>
     </div>
 </template>
 
@@ -87,9 +109,18 @@ import Card from "@/components/Card.vue";
 import {nextTick, ref} from "vue";
 import {bubbleRange, quickSort} from "@/utils/util.js";
 import Button from "@/components/Button.vue";
+import Block from "@/components/Block.vue";
+
+
+const boxDecorationBreakState = ref("slice");
+
+function changeBoxDecorationBreakState(newState) {
+  boxDecorationBreakState.value = newState;
+}
 
 const isTransition = ref(false);
 const isTeleport = ref(false);
+
 
 
 const hoverTargetDom = ref(null);
@@ -326,5 +357,20 @@ console.log(1<2<3,"test")
     border-radius: 12px;
     cursor: pointer;
 }
+.box-decoration-break_highlight {
+  box-decoration-break: clone;
+  background: linear-gradient(45deg, #ff6b6b, #ffa726);
+  border-radius: 8px;
+  padding: 0 10px;
+  margin: 0 5px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
 
+.clone_box-decoration-break_highlight {
+  box-decoration-break: clone;
+}
+
+.slice_box-decoration-break_highlight {
+  box-decoration-break: slice;
+}
 </style>
